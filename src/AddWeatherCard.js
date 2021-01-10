@@ -5,6 +5,9 @@ function AddWeatherCard() {
 
     function processCityNameInput(event){
         setCityName(event.target.value);
+        fetch('https://api.teleport.org/api/cities?search='+event.target.value)
+            .then(response => response.json())
+            .then((data) => {if (data!=null) console.log(data._embedded["city:search-results"])});
     }
     return (
         <div className="addWeatherCard">
