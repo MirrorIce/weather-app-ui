@@ -4,12 +4,14 @@ import CitySuggestionContainer from "./CitySuggestionContainer.js"
 function AddWeatherCard() {
     const [cityName, setCityName] = useState('');
     const [citySuggestions, setCitySuggestions] = useState([]);
-
+    const [isCitySelected, setIsCitySelected] = useState(false);
     function processCityNameInput(event){
         setCityName(event.target.value);
+        if (isCitySelected == false)
         fetch('https://api.teleport.org/api/cities?search='+event.target.value)
             .then(response => response.json())
             .then((data) => {if (data!=null){
+                console.log(data);
                 setCitySuggestions((arr) =>{
                     //Setting the length to 0 effectively deletes the array
                     arr.length = 0;
@@ -32,7 +34,7 @@ function AddWeatherCard() {
                 <h3>Add city</h3>
                 <button>+</button>
                 <input onChange={processCityNameInput} value={cityName} type='text' placeholder="City Name"></input>
-                <CitySuggestionContainer cities={citySuggestions}/>
+                <CitySuggestionContainer setIsCitySelected = {setIsCitySelected} cities={citySuggestions}/>
             </div>
         )
     
