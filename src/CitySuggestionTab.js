@@ -4,10 +4,10 @@ function CitySuggestionTab(props) {
     function selectCity(event)
     {
         console.log(event.target.getAttribute('value'));
-        props.setIsCitySelected(true);
+        props.setCityInput(event.target.getAttribute('value'));
     }
     return (
-        <li onClick = {selectCity} value = {props.city}>
+        <li onMouseDown = {selectCity} value = {props.city}>
            {props.city}
         </li>
     )

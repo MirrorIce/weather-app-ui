@@ -28,13 +28,33 @@ function AddWeatherCard() {
                 });
             } 
         });
+        else{
+            setCitySuggestions((arr)=>{
+                arr.length = 0;
+                return arr;
+            });
+        }
+    }
+    function toggleSuggestions(isVisible)
+    {
+        if (isVisible){
+            setIsCitySelected(false);
+        }
+        else{
+            setIsCitySelected(true);
+            setCitySuggestions((arr) =>{
+                //Setting the length to 0 effectively deletes the array
+                arr.length = 0;
+                return arr;
+            });
+        }
     }
     return (
         <div className="addWeatherCard">
                 <h3>Add city</h3>
                 <button>+</button>
-                <input onChange={processCityNameInput} value={cityName} type='text' placeholder="City Name"></input>
-                <CitySuggestionContainer setIsCitySelected = {setIsCitySelected} cities={citySuggestions}/>
+                <input onFocus={()=>{toggleSuggestions(true)}} onBlur = {()=>{toggleSuggestions(false)}} onChange={processCityNameInput} value={cityName} type='text' placeholder="City Name"></input>
+                <CitySuggestionContainer setCityInput={setCityName} setIsCitySelected = {setIsCitySelected} cities={citySuggestions}/>
             </div>
         )
     

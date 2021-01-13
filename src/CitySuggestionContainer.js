@@ -6,7 +6,7 @@ function CitySuggestionContainer(props) {
     return (
         <div>
             <ul>
-                {props.cities.map((value,idx) => <CitySuggestionTab setIsCitySelected = {props.setIsCitySelected} key={idx} city={value} ></CitySuggestionTab>)}
+                {props.cities.map((value,idx) => <CitySuggestionTab setCityInput={props.setCityInput} setIsCitySelected = {props.setIsCitySelected} key={idx} city={value} ></CitySuggestionTab>)}
             </ul>
         </div>
     )
