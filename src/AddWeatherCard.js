@@ -1,13 +1,17 @@
 import React, { Component, useState } from 'react'
 import CitySuggestionContainer from "./CitySuggestionContainer.js"
-//TODO Divide the functionality of toggleSuggestions into two: setCitySelection and hideSuggestionList. This way we ensure that we don't mix those two and have logic issues.
+
 function AddWeatherCard() {
     const [cityName, setCityName] = useState('');
     const [citySuggestions, setCitySuggestions] = useState([]);
     const [isCitySelected, setIsCitySelected] = useState(false);
+    const [isSuggestionVisible, setIsSuggestionVisible] = useState(false);
+
     function processCityNameInput(event){
+        //Keep the input state
         setCityName(event.target.value);
-        if (isCitySelected == false)
+        //Reset the city selection
+        setIsCitySelected(false);
         fetch('https://api.teleport.org/api/cities?search='+event.target.value)
             .then(response => response.json())
             .then((data) => {if (data!=null){
@@ -20,28 +24,19 @@ function AddWeatherCard() {
                             arr.push(value.matching_full_name);
                          });
                         }
-                    //arr = [];
-                    //arr.push(0);
-                    return arr;
-                    //data._embedded["city:search-results"]
-               
+
+                    return arr;     
                 });
             } 
         });
-        else{
-            setCitySuggestions((arr)=>{
-                arr.length = 0;
-                return arr;
-            });
-        }
     }
     function toggleSuggestions(isVisible)
     {
         if (isVisible){
-            setIsCitySelected(false);
+            setIsSuggestionVisible(false);
         }
         else{
-            setIsCitySelected(true);
+            setIsSuggestionVisible(true);
             setCitySuggestions((arr) =>{
                 //Setting the length to 0 effectively deletes the array
                 arr.length = 0;
@@ -75,6 +70,7 @@ function AddWeatherCard() {
         }
             
     }
+
     return (
         <div className="addWeatherCard">
                 <h3>Add city</h3>

@@ -3,7 +3,7 @@ import React from 'react'
 function CitySuggestionTab(props) {
     function selectCity(event)
     {
-        console.log(event.target.getAttribute('value'));
+        props.setIsCitySelected(true);
         props.setCityInput(event.target.getAttribute('value'));
     }
     return (
