@@ -1,13 +1,13 @@
 import React from 'react'
 
-function WeatherCard() {
+function WeatherCard(props) {
     return (
         <div>
-            <h1>City Name</h1>
+            <h1>{props.cityDetails.cityDetails.name}</h1>
             <p>Weather Pictogram</p>
             <p>State</p>
 
-            <p>Min temp</p>
+            <p>{props.cityDetails.weatherDetails.dataseries[0].temp2m}</p>
             <p>Max temp</p>
         </div>
     )

@@ -52,10 +52,14 @@ function AddWeatherCard() {
             tzoffset:0
         }
         return new Promise(function(resolve){
+            //First split the name so that it doesn't have any paranthesis names
+            //The API doesn't like city names with parantheses in the end so it will return an invalid value ( no result found )
+            cityName = cityName.split('(')[0];
             //Fetch the city GeoID
             fetch('https://api.teleport.org/api/cities?search='+cityName)
                 .then(response => response.json())
                 .then((data) => {if (data!=null){
+                     console.log(data);
                      let cityURL = data['_embedded']['city:search-results'][0]['_links']['city:item']['href'];
                      let cityGeoId = cityURL.split('/')[5];
                      cityDetails.geoid = cityGeoId;
@@ -63,7 +67,7 @@ function AddWeatherCard() {
                      .then(response => response.json())
                       .then((data) => {
                           cityDetails.lat = data.location.latlon.latitude;
-                          cityDetails.lat = data.location.latlon.longitude;
+                          cityDetails.long = data.location.latlon.longitude;
                           resolve(cityDetails);
                 })
 
