@@ -4,7 +4,11 @@ import {useState,useEffect} from 'react'
 import AddWeatherCard from './AddWeatherCard.js'
 import WeatherCard from './WeatherCard.js'
 function App() {
-  //TODO Think about a proper data structure in order to store temperature data. It must include a method to keep several days of forecast.
+  //TODO: Find a solution to represent the timezone correctly
+  //TODO: Implement the detailed weather view
+  //TODO: Research about redux
+  //TODO: Research about ant design
+  //TODO: Research about ant plugin for react
   let [cityDetails, setCityDetails] = useState([]);
   let [cities,setCities] = useState(JSON.parse(localStorage.getItem('weatherCities')));
   
@@ -27,19 +31,18 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Weathery</h1>
-      <h2>Your friendly weather app</h2>
-      <AddWeatherCard></AddWeatherCard>
+      <div className = "appHead">
+        <h1>Weathery</h1>
+       <h2>Your friendly weather app</h2>
+      </div>
       <p style={{color:"red"}}>NOTE: THERE IS NOT TIMEZONE IMPLEMENTATION ATM SO THE DISPLAYED TIME MAY BE WRONG (100%)</p>
-      {cityDetails!=null?cityDetails.map((detailedCity,cityIndex)=>{
-          return <WeatherCard cityDetails = {detailedCity} />
+      <div className = 'weatherCards' >
+        <AddWeatherCard></AddWeatherCard>
+        {cityDetails!=null?cityDetails.map((detailedCity,cityIndex)=>{
+          return <WeatherCard key={cityIndex} cityDetails = {detailedCity} />
+        }):null
         }
-      
-      ):null
-      }
-
-
-
+      </div>
     </div>
   );
 }

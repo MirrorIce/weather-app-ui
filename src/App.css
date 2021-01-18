@@ -1,8 +1,41 @@
 .App {
   text-align: center;
+  width:100%;
+}
+
+.appHead{
+  background:coral;
+  width:100%;
+}
+.weatherCards{
+  display:grid;
+  flex-direction:horizontal;
+  row-gap:25px;
+  grid-template-columns: repeat(3,1fr);
+  background:lightgray;
+  width:50%;
+  margin:0 auto;
+
+}
+.addWeatherCard{
+  border:1px solid red;
 }
 
 
-.addWeatherCard{
-  border:1px solid red;
+.weatherCard{
+  border:1px solid gold;
+  background:gray;
+}
+
+@media(max-width:600px)
+{
+  .weatherCards{
+    box-sizing:border-box;
+    grid-template-columns: repeat(1,1fr);
+    column-gap:20px;
+    width:100%;
+  }
+  .weatherCard{
+    margin:40px;
+  }
 }
