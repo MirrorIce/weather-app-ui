@@ -4,23 +4,25 @@ import * as d3 from 'd3';
 class DetailedWeather extends Component {
     
     state = {
-        d3Ref: React.createRef()
+        d3Svg: React.createRef()
     }
 
     componentDidMount(){
-        d3.select("body")
-        .selectAll('h2')
-        .data([1,2,3])
-        .enter()
-        .append("h2")
-        .text('XX')
+        d3.select(this.state.d3Svg.current)
+        .style('width','400px')
+        .style('height','400px')
+        .append('g')
+        
     }
     
 
 
     render() {
         return (
-            <div ref = {this.state.d3Ref}>
+            <div >
+                <svg ref = {this.state.d3Svg}>
+
+                </svg>
                 
             </div>
         )
