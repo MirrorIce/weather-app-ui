@@ -4,24 +4,26 @@ import * as d3 from 'd3';
 class DetailedWeather extends Component {
     
     state = {
-        d3Svg: React.createRef()
+        d3Svg: React.createRef(),
+        cityData:null
     }
 
     componentDidMount(){
+        console.log(this.props.cityOverview);
         let data = [1,2,2,5,1,2,4];
 
         let svg = d3.select(this.state.d3Svg.current)
-        .style('width','400px')
+        .style('width','800px')
         .style('height','500px');
         
         let graph = svg.append('g')
-                    .attr('width',400);
+                    .attr('width',800);
         let gXAxis = graph.append('g')
-                     .attr('transform','translate(0,410)');
+                     .attr('transform','translate(0,510)');
         let gYAxis = graph.append('g')
         let x = d3.scaleBand()
-                .domain([0,1,2,3,4,5,6,7])
-                .range([0,300])
+                .domain(this.props.cityOverview.map((d)=>{return d.timepoint}))
+                .range([0,800])
         let y = d3.scaleLinear()
                 .domain([0,5])
                 .range([300,0]);
