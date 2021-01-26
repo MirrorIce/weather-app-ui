@@ -21,17 +21,17 @@ function App() {
   useEffect(() =>{
     if (cities!=null){
       cities.map((city,cityIndex) =>{
-        fetch('http://www.7timer.info/bin/civil.php?lon='+city.long+'&lat='+city.lat+'&ac=0&unit=metric&output=json&tzshift=0')
-        .then(response => response.json())
-        .then((data) => {
-          console.log(data);
+        // fetch('http://www.7timer.info/bin/civil.php?lon='+city.long+'&lat='+city.lat+'&ac=0&unit=metric&output=json&tzshift=0')
+        // .then(response => response.json())
+        // .then((data) => {
+        //   console.log(data);
           let newDetailedCity = {
             cityDetails: city,
-            weatherDetails:data
+            weatherDetails:0
           }
           return setCityDetails(oldDetailedCityArray => [...oldDetailedCityArray, newDetailedCity]);
         }) 
-      });
+      // });
     } 
   },[cities]);
 
