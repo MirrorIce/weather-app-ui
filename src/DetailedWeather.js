@@ -13,30 +13,36 @@ class DetailedWeather extends Component {
         console.log(this.props.cityOverview);
 
         let svg = d3.select(this.state.d3Svg.current)
-        .style('width','1200px')
-        .style('height','400px');
+        .style('width',window.innerWidth-50+'px')
+        .style('height','400px')
+        .style('border','1px solid red')
         
         let graph = svg.append('g')
-                    .attr('width',900)
-                    .attr('transform','translate(300,0)')
+                    .attr('width',window.innerWidth)
+                    .attr('transform','translate(40px,0)')
         let gXAxis = graph.append('g')
                      .attr('transform','translate(0,300)');
         let gYAxis = graph.append('g')
         let x = d3.scaleBand()
                 .domain(details.map((d,i)=>{return d.timepoint}))
-                .range([0,800])
+                .range([0,window.innerWidth-100])
                 .paddingInner(0.1);
         let y = d3.scaleLinear()
                 // ... used for destructuring ( splitting the array into separate arguments)
-                .domain([Math.min(...details.map((d)=>{return d.temp2m})),5+Math.max(...details.map((d)=>{return d.temp2m}))])
+                .domain([-2+Math.min(...details.map((d)=>{return d.temp2m})),5+Math.max(...details.map((d)=>{return d.temp2m}))])
                 .range([300,0]);
 
-        let xAxis = d3.axisBottom(x);
+        let xAxis = d3.axisBottom(x)
+                    .ticks(10);
         let yAxis = d3.axisLeft(y)
                     .ticks(25);
             
         gXAxis.call(xAxis);
         gYAxis.call(yAxis);
+
+        let tooltip = d3.select('.detailedWeatherView').append('g')
+                      .attr("class",'detailedWeatherTooltip')
+                      .attr('width','200px')
         let rects = graph.selectAll('rect')
                     .data(details.map((d)=> {return d}));
         rects.attr('width',x.bandwidth)
@@ -51,6 +57,7 @@ class DetailedWeather extends Component {
             .attr('height', d => 300 - y(d.temp2m))
             .attr('x', (d,i) => x(d.timepoint))
             .attr('y', d => y(d.temp2m))
+            .on("mouseover",(d,i)=>{tooltip.text(i.temp2m)});
 
   
         
@@ -60,7 +67,7 @@ class DetailedWeather extends Component {
 
     render() {
         return (
-            <div >
+            <div className = 'detailedWeatherView'>
                 <svg ref = {this.state.d3Svg}>
 
                 </svg>

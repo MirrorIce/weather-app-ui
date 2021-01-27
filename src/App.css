@@ -2,6 +2,28 @@
   text-align: center;
   width:100%;
 }
+.detailedWeatherView{
+  position:relative;
+  border:1px solid gold;
+  width:fit-content;
+  margin:0 auto;
+}
+.detailedWeatherTooltip{
+  font-size:40px;
+  position:absolute;
+  top:0;
+  left:15%;
+  border:1px solid gold;
+}
+.bar-rect{
+  border:1px solid white;
+  fill:gray;
+  transition:.2s ease fill;
+}
+
+.bar-rect:hover{
+  fill:lightgray;
+}
 
 .appHead{
   background:coral;
