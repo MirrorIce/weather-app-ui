@@ -40,9 +40,17 @@ class DetailedWeather extends Component {
         gXAxis.call(xAxis);
         gYAxis.call(yAxis);
 
-        let tooltip = d3.select('.detailedWeatherView').append('g')
+        let tooltip = d3.select('.detailedWeatherView').append('div')
                       .attr("class",'detailedWeatherTooltip')
                       .attr('width','200px')
+        let content = {
+            temperature: tooltip.append('p')
+                         .attr('class','temperatureView'),
+            precType: tooltip.append('p')
+                        .attr('class','precTypeView'),
+            weather: tooltip.append('p')
+                     .attr('class','weatherView')
+        }
         let rects = graph.selectAll('rect')
                     .data(details.map((d)=> {return d}));
         rects.attr('width',x.bandwidth)
@@ -57,7 +65,11 @@ class DetailedWeather extends Component {
             .attr('height', d => 300 - y(d.temp2m))
             .attr('x', (d,i) => x(d.timepoint))
             .attr('y', d => y(d.temp2m))
-            .on("mouseover",(d,i)=>{tooltip.text(i.temp2m)});
+            .on("mouseover",(d,i)=>{
+                content.temperature.text(i.temp2m);
+                content.precType.text(i.prec_type);
+                content.weather.text(i.weather);
+            });
 
   
         
