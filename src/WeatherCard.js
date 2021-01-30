@@ -7,7 +7,7 @@ function WeatherCard(props) {
                 props.setCityOverview(props.cityDetails.weatherDetails.dataseries)}
                 } 
                 className ='weatherCard'> 
-            <h1>{props.cityDetails.cityDetails.name}</h1>
+            <h3>{props.cityDetails.cityDetails.name}</h3>
             <p>Weather Pictogram</p>
             <p>State</p>
             

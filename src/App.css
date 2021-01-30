@@ -1,10 +1,13 @@
-.App {
-  background: rgb(140,14,49);
-  background: linear-gradient(325deg, rgba(140,14,49,1) 0%, rgba(189,190,61,1) 60%, rgba(0,212,255,1) 100%);
-  
-  background-size:100% 100%;
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Lora&display=swap');
+body{
+  background:url("/src/background.jpg") no-repeat center center fixed;
+  font-family: 'Lora', serif;
+  background-size:cover;
+  background-attachment: fixed;
   width:100%;
+}
+.App {
+  text-align: center;
 }
 .detailedWeatherView{
   position:relative;
@@ -13,11 +16,12 @@
   margin:0 auto;
 }
 .detailedWeatherTooltip{
-  font-size:40px;
+  font-size:16px;
   position:absolute;
   top:0;
   left:15%;
-  border:1px solid gold;
+  border:1px solid white;
+  background:rgba(100,100,100,0.35);
 }
 .bar-rect{
   border:1px solid white;
@@ -30,8 +34,13 @@
 }
 
 .appHead{
-  background:coral;
-  width:100%;
+  
+  background:rgba(200,200,200,0.15);
+  width:fit-content;
+  margin:auto;
+  padding:15px;
+  border-radius:15px;
+  backdrop-filter:blur(15px);
 }
 .weatherCards{
   display:grid;
@@ -50,12 +59,23 @@
   backdrop-filter: blur(15px);
 }
 
+.addWeatherCard input{
+  border:none;
+  padding:5px;
+  
+}
+
 
 .weatherCard{
   background:rgba(255,255,255,0.15);
   backdrop-filter: blur(15px);
   border-radius:25px;
   padding:15px;
+} 
+
+.detailedWeatherView{
+  background:rgba(255,255,255,0.15);
+  backdrop-filter: blur(15px);
 }
 
 @media(max-width:600px)

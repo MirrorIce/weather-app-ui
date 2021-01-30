@@ -41,7 +41,7 @@ function App() {
         <h1>Weathery</h1>
        <h2>Your friendly weather app</h2>
       </div>
-      <p style={{color:"red"}}>NOTE: THERE IS NOT TIMEZONE IMPLEMENTATION ATM SO THE DISPLAYED TIME MAY BE WRONG (100%)</p>
+      <p style={{color:"white"}}>NOTE: THERE IS NOT TIMEZONE IMPLEMENTATION ATM SO THE DISPLAYED TIME MAY BE WRONG (100%)</p>
       <div className = 'weatherCards' >
         <AddWeatherCard></AddWeatherCard>
         {cityDetails!=null?cityDetails.map((detailedCity,cityIndex)=>{
