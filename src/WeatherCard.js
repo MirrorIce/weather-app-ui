@@ -9,10 +9,7 @@ function WeatherCard(props) {
                 className ='weatherCard'> 
             <h3>{props.cityDetails.cityDetails.name}</h3>
             <p>Weather Pictogram</p>
-            <p>State</p>
-            
             <p>{props.cityDetails.weatherDetails.dataseries==undefined?null:props.cityDetails.weatherDetails.dataseries[0].temp2m}</p>
-            <p>Max temp</p>
         </div>
     )
 }

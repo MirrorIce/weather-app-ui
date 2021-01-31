@@ -34,13 +34,15 @@ body{
 }
 
 .appHead{
-  
-  background:rgba(200,200,200,0.15);
-  width:fit-content;
-  margin:auto;
-  padding:15px;
-  border-radius:15px;
-  backdrop-filter:blur(15px);
+  background:white;
+  text-align:left;
+  padding-left:15px;
+  margin:0;
+}
+.appHead h1{
+  margin:0;
+  padding:10px;
+
 }
 .weatherCards{
   display:grid;
@@ -55,30 +57,77 @@ body{
 
 .addWeatherCard{
   border-radius:25px;
-  background:rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.35);
   backdrop-filter: blur(15px);
+  box-shadow:0px 5px 5px rgb(70,70,70);
+  display:flex;
+  flex-direction:column;
+  justify-items: center;
+  align-items: center;
 }
-
+.addWeatherCard div{
+  width:fit-content;
+}
 .addWeatherCard input{
   border:none;
-  padding:5px;
+  padding:7px;
+  outline:none; 
+  transition:.2s ease all;
+  position:relative;
+  border-radius:0px 15px 15px 0px;
   
 }
-
-
+.addWeatherCard input:focus{
+  box-shadow:3px 5px 5px rgba(100,100,100,1);
+}
+.addWeatherCard button{
+  border:none;
+  padding:7px;
+  padding-left:10px;
+  padding-right:10px;
+  background:rgba(255,255,255,0.3);
+  transition:.2s ease all;
+  position:relative;
+  border-radius:15px 0px 0px 15px;
+}
+.addWeatherCard button:hover{
+  box-shadow:0px 5px 10px rgba(100,100,100,0.75);
+  background:rgba(255,255,255,0.7);
+}
+.addWeatherCard ul{
+  list-style-type: none;
+  margin:0;
+  padding:0;
+  width:100%;
+}
+.addWeatherCard ul li{
+  margin:0;
+  box-sizing: border-box;
+  padding:10px 5px 10px 5px;
+  margin-top:7px;
+  width:100%;
+  background:  rgba(255,255,255,0.25);
+  box-shadow:0px 5px 10px rgba(100,100,100,0.75);
+  backdrop-filter:blur(5rem);
+}
+.addWeatherCard ul li:hover{
+  background:  rgba(255,255,255,0.55);
+}
 .weatherCard{
-  background:rgba(255,255,255,0.15);
+  background:linear-gradient(to bottom right,rgba(255,255,255,0.55),rgba(150,150,150,0.35)) ;
   backdrop-filter: blur(15px);
+  box-shadow:0px 5px 5px rgb(70,70,70);
   border-radius:25px;
   padding:15px;
 } 
 
 .detailedWeatherView{
-  background:rgba(255,255,255,0.15);
+  background:linear-gradient(to bottom right,rgba(255,255,255,0.55),rgba(150,150,150,0.35)) ;
   backdrop-filter: blur(15px);
+  box-shadow:0px 5px 5px rgb(70,70,70);
 }
 
-@media(max-width:600px)
+@media(max-width:800px)
 {
   .weatherCards{
     box-sizing:border-box;
@@ -87,6 +136,9 @@ body{
     width:100%;
   }
   .weatherCard{
+    margin:40px;
+  }
+  .addWeatherCard{
     margin:40px;
   }
 }

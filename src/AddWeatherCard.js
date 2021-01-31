@@ -110,8 +110,11 @@ function AddWeatherCard() {
     return (
         <div className="addWeatherCard">
                 <h3>Add city</h3>
-                <button onClick = {addCity}>+</button>
-                <input onFocus={()=>{toggleSuggestions(true)}} onBlur = {()=>{toggleSuggestions(false)}} onChange={processCityNameInput} value={cityName} type='text' placeholder="City Name"></input>
+                <div>
+                    <button onClick = {addCity}>+</button>
+                    <input onFocus={()=>{toggleSuggestions(true)}} onBlur = {()=>{toggleSuggestions(false)}} onChange={processCityNameInput} value={cityName} type='text' placeholder="City Name"></input>
+                </div>
+                
                 <CitySuggestionContainer setCityInput={setCityName} setIsCitySelected = {setIsCitySelected} cities={citySuggestions}/>
             </div>
         )
