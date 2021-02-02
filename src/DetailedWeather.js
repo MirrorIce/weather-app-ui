@@ -45,7 +45,7 @@ class DetailedWeather extends Component {
                      .attr('transform','translate(0,300)');
         let gYAxis = graph.append('g')
         let x = d3.scaleBand()
-                .domain(this.details.map((d,i)=>{return d.timepoint}))
+                .domain(this.details.map((d)=>{return d.timepoint}))
                 .range([0,window.innerWidth-100])
                 .paddingInner(0.1);
         let y = d3.scaleLinear()
@@ -58,8 +58,8 @@ class DetailedWeather extends Component {
         let yAxis = d3.axisLeft(y)
                     .ticks(25);
             
-        gXAxis.call(xAxis);
-        gYAxis.call(yAxis);
+        // gXAxis.call(xAxis);
+        // gYAxis.call(yAxis);
 
         let tooltip = d3.select('.detailedWeatherView').append('div')
                       .attr("class",'detailedWeatherTooltip')
@@ -72,28 +72,45 @@ class DetailedWeather extends Component {
             weather: tooltip.append('p')
                      .attr('class','weatherView')
         }
-        let rects = graph.selectAll('rect')
-                    .data(this.details.map((d)=> {return d}));
-        rects.attr('width',x.bandwidth)
-             .attr('class','bar-rect')
-             .attr('height',d=>300-y(d.temp2m))
-             .attr('x',(d,i)=>x(d.timepoint))
-             .attr('y',(d)=>y(d.temp2m))
-        rects.enter()
-            .append('rect')
-            .attr('class', 'bar-rect')
-            .attr('width', x.bandwidth)
-            .attr('height', d => 300 - y(d.temp2m))
-            .attr('x', (d,i) => x(d.timepoint))
-            .attr('y', d => y(d.temp2m))
-            .style("fill",d => {return this.temp2Color(d.temp2m)})
-            .on("mouseover",(d,i)=>{
-                content.temperature.text(i.temp2m);
-                content.precType.text(i.prec_type);
-                content.weather.text(i.weather);
-            });
+        // let rects = graph.selectAll('rect')
+        //             .data(this.details.map((d)=> {return d}));
+        // rects.attr('width',x.bandwidth)
+        //      .attr('class','bar-rect')
+        //      .attr('height',d=>300-y(d.temp2m))
+        //      .attr('x',(d)=>x(d.timepoint))
+        //      .attr('y',(d)=>y(d.temp2m))
+        // rects.enter()
+        //     .append('rect')
+        //     .attr('class', 'bar-rect')
+        //     .attr('width', x.bandwidth)
+        //     .attr('height', d => 300 - y(d.temp2m))
+        //     .attr('x', (d) => x(d.timepoint))
+        //     .attr('y', d => y(d.temp2m))
+        //     .style("fill",d => {return this.temp2Color(d.temp2m)})
+        //     .on("mouseover",(_d,i)=>{
+        //         content.temperature.text(i.temp2m);
+        //         content.precType.text(i.prec_type);
+        //         content.weather.text(i.weather);
+        //     });
 
-  
+        //Why n - d in y? Because the y axis is 0 in top and positive as it goes down, so if we want to represent a positive value upwards ( higher value is on top),
+        //then we have to 'reverse' the sign of the y function;
+        let lineFunction = d3.line()
+                           .x((d,i) =>{ return i*25 })
+                           .y((d,i)=>{return 300-d.temp2m})
+                           .curve(d3.curveBasis);
+        svg.append('path')
+        .attr('d',lineFunction(this.details.map((d)=>{return d})))
+        .attr('stroke-width',3)
+        .attr('stroke','black')
+        .attr('fill','none')
+        .on("mouseover",(_d,i)=>{
+            console.log(_d);
+            console.log(i);
+            // content.temperature.text(i.temp2m);
+            // content.precType.text(i.prec_type);
+            // content.weather.text(i.weather);
+        });
         
     }
     
