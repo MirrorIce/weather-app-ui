@@ -97,19 +97,33 @@ class DetailedWeather extends Component {
         //then we have to 'reverse' the sign of the y function;
         let lineFunction = d3.line()
                            .x((d,i) =>{ return i*25 })
-                           .y((d,i)=>{return 300-d.temp2m})
+                           .y((d,i)=>{return 300-(d.temp2m*1.5)})
                            .curve(d3.curveBasis);
+
+
         svg.append('path')
         .attr('d',lineFunction(this.details.map((d)=>{return d})))
         .attr('stroke-width',3)
         .attr('stroke','black')
-        .attr('fill','none')
-        .on("mouseover",(_d,i)=>{
+        .attr('fill','none');
+        let circleWrapper = svg.append('g');
+        let circle = svg.append('circle')
+        .attr('radius','5')
+        .style('fill','red');
+        svg.on("mousemove",(_d,i)=>{
             console.log(_d);
             console.log(i);
-            // content.temperature.text(i.temp2m);
-            // content.precType.text(i.prec_type);
-            // content.weather.text(i.weather);
+            console.log( Math.trunc(_d.screenX/25));
+            console.log(this.details[Math.trunc(_d.screenX/25)]);
+            circle.attr("cx",_d.screenX+"px");
+            circle.attr('cy',_d.screenY+"px");
+            let j = Math.trunc(_d.screenX/25);
+            if (j < this.details.length){
+                content.temperature.text(this.details[j].temp2m);
+                content.precType.text(this.details[j].prec_type);
+                content.weather.text(this.details[j].weather);
+            }
+            
         });
         
     }
