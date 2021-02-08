@@ -8,7 +8,7 @@ class DetailedWeather extends Component {
     state = {
         d3Svg: React.createRef(),
         cityData:null,
-        width:window.innerWidth,
+        width:window.innerWidth * 0.8,
         height:window.innerHeight
     }
 
@@ -22,9 +22,9 @@ class DetailedWeather extends Component {
             return  'rgb(200,'+(255-temperature*5)+',0)';
     }
     componentDidUpdate(){
-        if (this.state.width != window.innerWidth)
+        if (this.state.width != window.innerWidth*0.8)
             this.setState({
-                width:window.innerWidth,
+                width:window.innerWidth*0.8,
                 height:window.innerHeight
             });
     }
@@ -96,7 +96,7 @@ class DetailedWeather extends Component {
         //Why n - d in y? Because the y axis is 0 in top and positive as it goes down, so if we want to represent a positive value upwards ( higher value is on top),
         //then we have to 'reverse' the sign of the y function;
         let lineFunction = d3.line()
-                           .x((d,i) =>{ return i*25 })
+                           .x((d,i) =>{ return i*(this.state.width/this.details.length) })
                            .y((d,i)=>{return 300-(d.temp2m*1.5)})
                            .curve(d3.curveBasis);
 
@@ -122,9 +122,19 @@ class DetailedWeather extends Component {
                 content.temperature.text(this.details[j].temp2m);
                 content.precType.text(this.details[j].prec_type);
                 content.weather.text(this.details[j].weather);
-            }
-            
-        });
+            }            
+        })
+        .on('touchmove',function(_d){
+            _d.preventDefault();
+            let touches = _d.changedTouches;
+            alert(JSON.stringify(touches[touches.length-1]).pageX);
+            // let j = Math.trunc(_d.screenX/25);
+            // if (j < this.details.length){
+            //     content.temperature.text(this.details[j].temp2m);
+            //     content.precType.text(this.details[j].prec_type);
+            //     content.weather.text(this.details[j].weather);
+            // }          
+        })
         
     }
     
