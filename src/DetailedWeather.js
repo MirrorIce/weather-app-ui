@@ -34,91 +34,77 @@ class DetailedWeather extends Component {
         console.log(this.props.cityOverview);
 
         let svg = d3.select(this.state.d3Svg.current)
-        .style('width',this.state.width-50+'px')
-        .style('height','400px')
+        .style('width',(this.state.width)+'px')
+        .style('height','450px')
         
         
         let graph = svg.append('g')
                     .attr('width',window.innerWidth)
-                    .attr('transform','translate(40px,0)')
+                    .attr('transform','translate(200px,0)')
         let gXAxis = graph.append('g')
                      .attr('transform','translate(0,300)');
         let gYAxis = graph.append('g')
+                     .attr('transform','translate(20,95)')
         let x = d3.scaleBand()
                 .domain(this.details.map((d)=>{return d.timepoint}))
                 .range([0,window.innerWidth-100])
                 .paddingInner(0.1);
         let y = d3.scaleLinear()
                 // ... used for destructuring ( splitting the array into separate arguments)
-                .domain([-2+Math.min(...this.details.map((d)=>{return d.temp2m})),5+Math.max(...this.details.map((d)=>{return d.temp2m}))])
-                .range([300,0]);
+                .domain([Math.min(...this.details.map((d)=>{return d.temp2m})),Math.max(...this.details.map((d)=>{return d.temp2m}))])
+                .range([200,0]);
 
         let xAxis = d3.axisBottom(x)
+                    .ticks(5);
+        let yAxis = d3.axisRight(y)
                     .ticks(10);
-        let yAxis = d3.axisLeft(y)
-                    .ticks(25);
-            
-        // gXAxis.call(xAxis);
-        // gYAxis.call(yAxis);
+                    
+        
+        if (this.state.width > '500px')
+            gXAxis.call(xAxis);
+        gYAxis.call(yAxis)
+        .call(g => g.select(".domain").remove());
 
         let tooltip = d3.select('.detailedWeatherView').append('div')
                       .attr("class",'detailedWeatherTooltip')
                       .attr('width','200px')
         let content = {
-            temperature: tooltip.append('p')
+            temperature: tooltip.append('h2')
                          .attr('class','temperatureView'),
             precType: tooltip.append('p')
                         .attr('class','precTypeView'),
             weather: tooltip.append('p')
                      .attr('class','weatherView')
         }
-        // let rects = graph.selectAll('rect')
-        //             .data(this.details.map((d)=> {return d}));
-        // rects.attr('width',x.bandwidth)
-        //      .attr('class','bar-rect')
-        //      .attr('height',d=>300-y(d.temp2m))
-        //      .attr('x',(d)=>x(d.timepoint))
-        //      .attr('y',(d)=>y(d.temp2m))
-        // rects.enter()
-        //     .append('rect')
-        //     .attr('class', 'bar-rect')
-        //     .attr('width', x.bandwidth)
-        //     .attr('height', d => 300 - y(d.temp2m))
-        //     .attr('x', (d) => x(d.timepoint))
-        //     .attr('y', d => y(d.temp2m))
-        //     .style("fill",d => {return this.temp2Color(d.temp2m)})
-        //     .on("mouseover",(_d,i)=>{
-        //         content.temperature.text(i.temp2m);
-        //         content.precType.text(i.prec_type);
-        //         content.weather.text(i.weather);
-        //     });
+
 
         //Why n - d in y? Because the y axis is 0 in top and positive as it goes down, so if we want to represent a positive value upwards ( higher value is on top),
         //then we have to 'reverse' the sign of the y function;
         let lineFunction = d3.line()
                            .x((d,i) =>{ return i*(this.state.width/this.details.length) })
-                           .y((d,i)=>{return 300-(d.temp2m*1.5)})
-                           .curve(d3.curveBasis);
+                           .y((d,i)=>{return 220-(d.temp2m*1.5)})
+                      
 
 
         svg.append('path')
         .attr('d',lineFunction(this.details.map((d)=>{return d})))
         .attr('stroke-width',3)
         .attr('stroke','black')
-        .attr('fill','none');
-        let circleWrapper = svg.append('g');
+        .attr('fill','none')
+        .attr('transform','translate(20,0)');
         let circle = svg.append('circle')
-        .attr('radius','5')
-        .style('fill','red');
+        .attr('r','5')
+        .style('fill','black');
         svg.on("mousemove",(_d,i)=>{
-            console.log(_d);
-            console.log(i);
-            console.log( Math.trunc(_d.screenX/25));
-            console.log(this.details[Math.trunc(_d.screenX/25)]);
-            circle.attr("cx",_d.screenX+"px");
-            circle.attr('cy',_d.screenY+"px");
-            let j = Math.trunc(_d.screenX/25);
+            // console.log(_d);
+            // console.log(i);
+            // console.log( Math.trunc(_d.screenX/25));
+            // console.log(this.details[Math.trunc(_d.screenX/25)]);
+            let j = Math.trunc(_d.offsetX/(this.state.width/this.details.length));
+
             if (j < this.details.length){
+                circle.attr("cx",20+(this.state.width/this.details.length)*j+"px");
+                circle.attr('cy',(220-this.details[j].temp2m*1.5)+"px");
                 content.temperature.text(this.details[j].temp2m);
                 content.precType.text(this.details[j].prec_type);
                 content.weather.text(this.details[j].weather);
@@ -127,7 +113,7 @@ class DetailedWeather extends Component {
         .on('touchmove',function(_d){
             _d.preventDefault();
             let touches = _d.changedTouches;
-            alert(JSON.stringify(touches[touches.length-1]).pageX);
+            //alert(JSON.stringify(touches[touches.length-1]).pageX);
             // let j = Math.trunc(_d.screenX/25);
             // if (j < this.details.length){
             //     content.temperature.text(this.details[j].temp2m);
