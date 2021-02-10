@@ -40,11 +40,11 @@ class DetailedWeather extends Component {
         
         let graph = svg.append('g')
                     .attr('width',window.innerWidth)
-                    .attr('transform','translate(200px,0)')
+                    .attr('transform','translate(210px,0)')
         let gXAxis = graph.append('g')
                      .attr('transform','translate(0,300)');
         let gYAxis = graph.append('g')
-                     .attr('transform','translate(20,95)')
+                     .attr('transform','translate(0,95)')
         let x = d3.scaleBand()
                 .domain(this.details.map((d)=>{return d.timepoint}))
                 .range([0,window.innerWidth-100])
@@ -81,7 +81,7 @@ class DetailedWeather extends Component {
         //Why n - d in y? Because the y axis is 0 in top and positive as it goes down, so if we want to represent a positive value upwards ( higher value is on top),
         //then we have to 'reverse' the sign of the y function;
         let lineFunction = d3.line()
-                           .x((d,i) =>{ return i*(this.state.width/this.details.length) })
+                           .x((d,i) =>{ return 10+i*(this.state.width/this.details.length) })
                            .y((d,i)=>{return 220-(d.temp2m*1.5)})
                       
 
@@ -103,7 +103,7 @@ class DetailedWeather extends Component {
             let j = Math.trunc(_d.offsetX/(this.state.width/this.details.length));
 
             if (j < this.details.length){
-                circle.attr("cx",20+(this.state.width/this.details.length)*j+"px");
+                circle.attr("cx",30+(this.state.width/this.details.length)*j+"px");
                 circle.attr('cy',(220-this.details[j].temp2m*1.5)+"px");
                 content.temperature.text(this.details[j].temp2m);
                 content.precType.text(this.details[j].prec_type);
@@ -125,10 +125,11 @@ class DetailedWeather extends Component {
     }
     
 
-
-    render() {
+    
+    render() {if (this.props.cityOverview != undefined ) console.log(this.props.cityOverview.cityDetails.name);
         return (
             <div className = 'detailedWeatherView'>
+                <h2>{(this.props.cityDetails!=undefined)?this.props.cityOverview.cityDetails.name:null}</h2>
                 <svg ref = {this.state.d3Svg}>
 
                 </svg>

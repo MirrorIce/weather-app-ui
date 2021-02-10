@@ -17,7 +17,7 @@ function App() {
   //These are the cities from localStorage
   let [cities,setCities] = useState(JSON.parse(localStorage.getItem('weatherCities')));
   //Here we store the values for the overview of a city
-  let [cityOverview,setCityOverview] = useState([]);
+  let [cityOverview,setCityOverview] = useState();
   
   useEffect(() =>{
     if (cities!=null){
@@ -45,7 +45,7 @@ function App() {
       <div className = 'weatherCards' >
         <AddWeatherCard></AddWeatherCard>
         {cityDetails!=null?cityDetails.map((detailedCity,cityIndex)=>{
-          return <WeatherCard setCityOverview={setCityOverview} key={cityIndex} cityDetails = {detailedCity} />
+          return <WeatherCard setCityOverview={() =>{setCityOverview(detailedCity)}} key={cityIndex} cityDetails = {detailedCity} />
         }):null
         }
       </div>
