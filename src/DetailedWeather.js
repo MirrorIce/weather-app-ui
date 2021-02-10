@@ -9,7 +9,8 @@ class DetailedWeather extends Component {
         d3Svg: React.createRef(),
         cityData:null,
         width:window.innerWidth * 0.8,
-        height:window.innerHeight
+        height:window.innerHeight,
+        cityDetails:this.props.cityOverview
     }
 
     temp2Color = function(temperature){
@@ -21,7 +22,11 @@ class DetailedWeather extends Component {
         else
             return  'rgb(200,'+(255-temperature*5)+',0)';
     }
-    componentDidUpdate(){
+    componentDidUpdate(prevProps){
+        if (prevProps.cityOverview != this.props.cityOverview)
+        {
+            this.setState({cityDetails:this.props.cityOverview})
+        }
         if (this.state.width != window.innerWidth*0.8)
             this.setState({
                 width:window.innerWidth*0.8,
@@ -126,14 +131,14 @@ class DetailedWeather extends Component {
     
 
     
-    render() {if (this.props.cityOverview != undefined ) console.log(this.props.cityOverview.cityDetails.name);
+    render() {if (this.state.cityDetails !== undefined ) console.log(this.state.cityDetails.cityDetails.name);
         return (
             <div className = 'detailedWeatherView'>
-                <h2>{(this.props.cityDetails!=undefined)?this.props.cityOverview.cityDetails.name:null}</h2>
+                
                 <svg ref = {this.state.d3Svg}>
 
                 </svg>
-                
+                <h2>{this.state.cityDetails!==undefined?this.state.cityDetails.cityDetails.name:null}</h2>
             </div>
         )
     }
