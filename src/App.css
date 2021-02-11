@@ -14,11 +14,16 @@ html{
   width:fit-content;
   margin:0 auto;
 }
+
+.detailedWeatherView h2:nth-child(2){
+  padding-top:50px;
+}
+
 .detailedWeatherTooltip{
   min-width:200px;
   font-size:16px;
   position:absolute;
-  top:5%;
+  top:15%;
   left:45%;
   border:1px solid rgba(255,255,255,0.3);
 }
@@ -134,8 +139,10 @@ html{
 svg{
   position:absolute;
   left:10%;
-  top:25%;
+  top:35%;
   margin:auto;
+  padding:25px;
+  border:1px solid red;
 }
 
 @media(max-width:800px)
@@ -151,5 +158,14 @@ svg{
   }
   .addWeatherCard{
     margin:40px;
+  }
+
+  svg{
+    left:0%;
+  }
+
+  .detailedWeatherTooltip{
+    left:25%;
+    top:25%;
   }
 }

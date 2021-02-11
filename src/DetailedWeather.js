@@ -12,7 +12,6 @@ class DetailedWeather extends Component {
         height:window.innerHeight,
         cityDetails:this.props.cityOverview
     }
-
     temp2Color = function(temperature){
         console.log(temperature);
         if (temperature<0)
@@ -86,7 +85,7 @@ class DetailedWeather extends Component {
         //Why n - d in y? Because the y axis is 0 in top and positive as it goes down, so if we want to represent a positive value upwards ( higher value is on top),
         //then we have to 'reverse' the sign of the y function;
         let lineFunction = d3.line()
-                           .x((d,i) =>{ return 10+i*(this.state.width/this.details.length) })
+                           .x((d,i) =>{ return i*(this.state.width/this.details.length) })
                            .y((d,i)=>{return 220-(d.temp2m*1.5)})
                       
 
@@ -103,12 +102,13 @@ class DetailedWeather extends Component {
         svg.on("mousemove",(_d,i)=>{
             // console.log(_d);
             // console.log(i);
-            // console.log( Math.trunc(_d.screenX/25));
+             console.log( _d.offsetX);
+             console.log(circle.attr('cx'));
             // console.log(this.details[Math.trunc(_d.screenX/25)]);
             let j = Math.trunc(_d.offsetX/(this.state.width/this.details.length));
 
             if (j < this.details.length){
-                circle.attr("cx",30+(this.state.width/this.details.length)*j+"px");
+                circle.attr("cx",-25+(_d.offsetX)+"px");
                 circle.attr('cy',(220-this.details[j].temp2m*1.5)+"px");
                 content.temperature.text(this.details[j].temp2m);
                 content.precType.text(this.details[j].prec_type);
