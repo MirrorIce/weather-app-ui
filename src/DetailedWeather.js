@@ -41,7 +41,8 @@ class DetailedWeather extends Component {
         .style('width',(this.state.width)+'px')
         .style('height','450px')
         
-        
+        let svgLeft = document.querySelector('svg').getBoundingClientRect().left;
+        let svgRight = document.querySelector('svg').getBoundingClientRect().right;
         let graph = svg.append('g')
                     .attr('width',window.innerWidth)
                     .attr('transform','translate(210px,0)')
@@ -89,7 +90,7 @@ class DetailedWeather extends Component {
                            .y((d,i)=>{return 220-(d.temp2m*1.5)})
                       
 
-
+        
         svg.append('path')
         .attr('d',lineFunction(this.details.map((d)=>{return d})))
         .attr('stroke-width',3)
@@ -99,20 +100,16 @@ class DetailedWeather extends Component {
         let circle = svg.append('circle')
         .attr('r','5')
         .style('fill','black');
+        
         svg.on("mousemove",(_d,i)=>{
-            // console.log(_d);
-            // console.log(i);
-             console.log( _d.offsetX);
-             console.log(circle.attr('cx'));
-            // console.log(this.details[Math.trunc(_d.screenX/25)]);
-            let j = Math.trunc(_d.offsetX/(this.state.width/this.details.length));
-
-            if (j < this.details.length){
-                circle.attr("cx",-25+(_d.offsetX)+"px");
-                circle.attr('cy',(220-this.details[j].temp2m*1.5)+"px");
-                content.temperature.text(this.details[j].temp2m);
-                content.precType.text(this.details[j].prec_type);
-                content.weather.text(this.details[j].weather);
+            let unitValue = (this.state.width)/(this.details.length);
+            let index = Math.trunc((_d.clientX-svgLeft-40)/unitValue);
+            if (index >= 0 && index < this.details.length){
+                circle.attr("cx",( unitValue*index+20 )+"px");
+                circle.attr('cy',(220-this.details[index].temp2m*1.5)+"px");
+                content.temperature.text(this.details[index].temp2m);
+                content.precType.text(this.details[index].prec_type);
+                content.weather.text(this.details[index].weather);
             }            
         })
         .on('touchmove',function(_d){

@@ -11,6 +11,9 @@ function App() {
   //TODO: Research about ant design
   //TODO: Research about ant plugin for react
   //TODO: Convert bar chart to line chart
+
+
+  //TODO: Implement the bare correctly !!!!
   
   //Here the detailed forecast is stored for each city memorised in the localStorage
   let [cityDetails, setCityDetails] = useState([]);
