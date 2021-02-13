@@ -9,7 +9,7 @@ class DetailedWeather extends Component {
         d3Svg: React.createRef(),
         cityData:null,
         width:window.innerWidth * 0.8,
-        height:window.innerHeight,
+        height:450,
         cityDetails:this.props.cityOverview
     }
     temp2Color = function(temperature){
@@ -28,8 +28,7 @@ class DetailedWeather extends Component {
         }
         if (this.state.width != window.innerWidth*0.8)
             this.setState({
-                width:window.innerWidth*0.8,
-                height:window.innerHeight
+                width:window.innerWidth*0.8
             });
     }
     componentDidMount(){
@@ -39,7 +38,7 @@ class DetailedWeather extends Component {
 
         let svg = d3.select(this.state.d3Svg.current)
         .style('width',(this.state.width)+'px')
-        .style('height','450px')
+        .style('height',this.state.height+"px")
         
         let svgLeft = document.querySelector('svg').getBoundingClientRect().left;
         let svgRight = document.querySelector('svg').getBoundingClientRect().right;
@@ -57,7 +56,7 @@ class DetailedWeather extends Component {
         let y = d3.scaleLinear()
                 // ... used for destructuring ( splitting the array into separate arguments)
                 .domain([Math.min(...this.details.map((d)=>{return d.temp2m})),Math.max(...this.details.map((d)=>{return d.temp2m}))])
-                .range([400,0]);
+                .range([this.state.height-75,0]);
 
         let xAxis = d3.axisBottom(x)
                     .ticks(5);
@@ -82,46 +81,52 @@ class DetailedWeather extends Component {
                      .attr('class','weatherView')
         }
 
+        let gradient = svg.append('linearGradient')
+                       .attr("id",'tempGradient')
+                       .attr("x1","0%")
+                       .attr("x2","0%")
+                       .attr("y1","0%")
+                       .attr("y2","100%");
+        gradient.append("stop")
+        .attr("offset","0%")
+        .attr("stop-color","red");
+        gradient.append("stop")
+        .attr("offset","50%")
+        .attr("stop-color",'green');
+        gradient.append("stop")
+        .attr("offset","100%")
+        .attr("stop-color","darkblue");
 
         //Why n - d in y? Because the y axis is 0 in top and positive as it goes down, so if we want to represent a positive value upwards ( higher value is on top),
         //then we have to 'reverse' the sign of the y function;
         let lineFunction = d3.line()
                            .x((d,i) =>{ return i*(this.state.width/this.details.length) })
-                           .y((d,i)=>{return 400-(400/75*d.temp2m+265)})
+                           .y((d,i)=>{return (this.state.height-75)-((this.state.height-75)/(75)*d.temp2m)-250})
+                           
                       
 
         
         svg.append('path')
         .attr('d',lineFunction(this.details.map((d)=>{return d})))
         .attr('stroke-width',3)
-        .attr('stroke','black')
+        .attr('stroke','url(#tempGradient)')
         .attr('fill','none')
         .attr('transform','translate(20,0)');
         let circle = svg.append('circle')
         .attr('r','5')
-        .style('fill','black');
+        .style('fill','url(#tempGradient)')
+        .style("transition",".2s ease all");
         
         svg.on("mousemove",(_d,i)=>{
             let unitValue = (this.state.width)/(this.details.length);
             let index = Math.trunc((_d.clientX-svgLeft-40)/unitValue);
             if (index >= 0 && index < this.details.length){
                 circle.attr("cx",( unitValue*index+20 )+"px");
-                circle.attr('cy',(400-(400/75*this.details[index].temp2m+265))+"px");
+                circle.attr('cy',((this.state.height-75)-((this.state.height-75)/75*this.details[index].temp2m)-250)+"px");
                 content.temperature.text(this.details[index].temp2m);
                 content.precType.text(this.details[index].prec_type);
                 content.weather.text(this.details[index].weather);
             }            
-        })
-        .on('touchmove',function(_d){
-            _d.preventDefault();
-            let touches = _d.changedTouches;
-            //alert(JSON.stringify(touches[touches.length-1]).pageX);
-            // let j = Math.trunc(_d.screenX/25);
-            // if (j < this.details.length){
-            //     content.temperature.text(this.details[j].temp2m);
-            //     content.precType.text(this.details[j].prec_type);
-            //     content.weather.text(this.details[j].weather);
-            // }          
         })
         
     }
