@@ -49,7 +49,7 @@ class DetailedWeather extends Component {
         let gXAxis = graph.append('g')
                      .attr('transform','translate(0,300)');
         let gYAxis = graph.append('g')
-                     .attr('transform','translate(0,95)')
+                     .attr('transform','translate(-10,0)')
         let x = d3.scaleBand()
                 .domain(this.details.map((d)=>{return d.timepoint}))
                 .range([0,window.innerWidth-100])
@@ -57,7 +57,7 @@ class DetailedWeather extends Component {
         let y = d3.scaleLinear()
                 // ... used for destructuring ( splitting the array into separate arguments)
                 .domain([Math.min(...this.details.map((d)=>{return d.temp2m})),Math.max(...this.details.map((d)=>{return d.temp2m}))])
-                .range([200,0]);
+                .range([400,0]);
 
         let xAxis = d3.axisBottom(x)
                     .ticks(5);
@@ -87,7 +87,7 @@ class DetailedWeather extends Component {
         //then we have to 'reverse' the sign of the y function;
         let lineFunction = d3.line()
                            .x((d,i) =>{ return i*(this.state.width/this.details.length) })
-                           .y((d,i)=>{return 220-(d.temp2m*1.5)})
+                           .y((d,i)=>{return 400-(400/75*d.temp2m+265)})
                       
 
         
@@ -106,7 +106,7 @@ class DetailedWeather extends Component {
             let index = Math.trunc((_d.clientX-svgLeft-40)/unitValue);
             if (index >= 0 && index < this.details.length){
                 circle.attr("cx",( unitValue*index+20 )+"px");
-                circle.attr('cy',(220-this.details[index].temp2m*1.5)+"px");
+                circle.attr('cy',(400-(400/75*this.details[index].temp2m+265))+"px");
                 content.temperature.text(this.details[index].temp2m);
                 content.precType.text(this.details[index].prec_type);
                 content.weather.text(this.details[index].weather);
