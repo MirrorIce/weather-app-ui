@@ -80,7 +80,8 @@ class DetailedWeather extends Component {
             let graph = svg.select('#graph')
             let gXAxis = graph.select('#gXAxis');
             let gYAxis = graph.select("#gYAxis");
-
+            let minTemp = Math.min(...this.state.cityDetails.weatherDetails.dataseries.map((d)=>{return d.temp2m}));
+            let maxTemp = Math.max(...this.state.cityDetails.weatherDetails.dataseries.map((d)=>{return d.temp2m}));
 
             let x = d3.scaleBand()
                     .domain(this.state.cityDetails.weatherDetails.dataseries.map((d)=>{return d.timepoint}))
@@ -88,8 +89,8 @@ class DetailedWeather extends Component {
                     .paddingInner(0.1);
             let y = d3.scaleLinear()
                     // ... used for destructuring ( splitting the array into separate arguments)
-                    .domain([Math.min(...this.state.cityDetails.weatherDetails.dataseries.map((d)=>{return d.temp2m})),Math.max(...this.state.cityDetails.weatherDetails.dataseries.map((d)=>{return d.temp2m}))])
-                    .range([this.state.height-75,0]);
+                    .domain([minTemp,maxTemp])
+                    .range([this.state.height-(maxTemp-minTemp),0]);
 
             let xAxis = d3.axisBottom(x)
                         .ticks(5);
@@ -133,8 +134,8 @@ class DetailedWeather extends Component {
             //then we have to 'reverse' the sign of the y function;
             let lineFunction = d3.line()
                             .x((d,i) =>{ return i*(this.state.width/this.state.cityDetails.weatherDetails.dataseries.length) })
-                            .y((d,i)=>{return (this.state.height-75)-((this.state.height-75)/(75)*d.temp2m)-250})
-                            
+                            .y((d,i)=>{return this.state.height - (this.state.height * d.temp2m / (maxTemp-minTemp) - (this.state.height * minTemp / (maxTemp-minTemp)))})
+                            //
                         
 
             
@@ -159,7 +160,7 @@ class DetailedWeather extends Component {
                     let unixSelectedDate = currentDate.getTime() + timepointToMillis;
 
                     circle.attr("cx",( unitValue*index+20 )+"px");
-                    circle.attr('cy',((this.state.height-75)-((this.state.height-75)/75*this.state.cityDetails.weatherDetails.dataseries[index].temp2m)-250)+"px");
+                    circle.attr('cy',((this.state.height-(maxTemp-minTemp))-((this.state.height-(maxTemp-minTemp))/(maxTemp-minTemp)*this.state.cityDetails.weatherDetails.dataseries[index].temp2m)-250)+"px");
                     content.temperature.text(this.state.cityDetails.weatherDetails.dataseries[index].temp2m+"°C");
                     content.precType.text(this.state.cityDetails.weatherDetails.dataseries[index].prec_type);
                     content.weather.attr("src",this.state.cityDetails.weatherDetails.dataseries[index].weather+'.svg');
