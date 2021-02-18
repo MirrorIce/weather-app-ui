@@ -142,7 +142,6 @@ svg{
   top:35%;
   margin:auto;
   padding:25px;
-  border:1px solid red;
 }
 
 @media(max-width:800px)
@@ -166,6 +165,6 @@ svg{
 
   .detailedWeatherTooltip{
     left:25%;
-    top:25%;
+    top:15%;
   }
 }
