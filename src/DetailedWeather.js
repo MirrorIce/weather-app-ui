@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3';
+import { max } from 'd3';
 
 class DetailedWeather extends Component {
 
@@ -62,15 +63,13 @@ class DetailedWeather extends Component {
         });
         if (prevProps.cityOverview != this.props.cityOverview)
         {
+            this.setState({cityDetails:this.props.cityOverview})
 
-        this.setState({cityDetails:this.props.cityOverview})
+        if (this.props.cityOverview!= undefined){
 
-
-        console.log(this.state.cityDetails);
-        if (this.state.cityDetails!= undefined){
             let svg = d3.select(this.state.d3Svg.current)
             .style('width',(this.state.width)+'px')
-            .style('height',(this.state.height+50)+"px")
+            .style('height',(this.state.height)+"px")
             
             let svgLeft = document.querySelector('svg').getBoundingClientRect().left;
             let svgRight = document.querySelector('svg').getBoundingClientRect().right;
@@ -79,17 +78,17 @@ class DetailedWeather extends Component {
             let graph = svg.select('#graph')
             let gXAxis = graph.select('#gXAxis');
             let gYAxis = graph.select("#gYAxis");
-            let minTemp = Math.min(...this.state.cityDetails.weatherDetails.dataseries.map((d)=>{return d.temp2m}));
-            let maxTemp = Math.max(...this.state.cityDetails.weatherDetails.dataseries.map((d)=>{return d.temp2m}));
+            let minTemp = Math.min(...this.props.cityOverview.weatherDetails.dataseries.map((d)=>{return d.temp2m}));
+            let maxTemp = Math.max(...this.props.cityOverview.weatherDetails.dataseries.map((d)=>{return d.temp2m}));
 
             let x = d3.scaleBand()
-                    .domain(this.state.cityDetails.weatherDetails.dataseries.map((d)=>{return d.timepoint}))
+                    .domain(this.props.cityOverview.weatherDetails.dataseries.map((d)=>{return d.timepoint}))
                     .range([0,window.innerWidth-100])
                     .paddingInner(0.1);
             let y = d3.scaleLinear()
                     // ... used for destructuring ( splitting the array into separate arguments)
                     .domain([minTemp,maxTemp])
-                    .range([this.state.height-(maxTemp-minTemp),0]);
+                    .range([(this.state.height-(maxTemp-minTemp))*0.8+50,50]);
 
             let xAxis = d3.axisBottom(x)
                         .ticks(5);
@@ -132,14 +131,13 @@ class DetailedWeather extends Component {
             //Why n - d in y? Because the y axis is 0 in top and positive as it goes down, so if we want to represent a positive value upwards ( higher value is on top),
             //then we have to 'reverse' the sign of the y function;
             let lineFunction = d3.line()
-                            .x((d,i) =>{ return i*(this.state.width/this.state.cityDetails.weatherDetails.dataseries.length) })
-                            .y((d,i)=>{return (this.state.height - (this.state.height * d.temp2m / (maxTemp-minTemp) - (this.state.height * minTemp / (maxTemp-minTemp))))})
-                            //
-                        
-
+                            .x((d,i) =>{ return i*(this.state.width/this.props.cityOverview.weatherDetails.dataseries.length) })
+                            .y((d,i)=>{return (((this.state.height) -(maxTemp-minTemp))-(((this.state.height)-(maxTemp-minTemp))/(maxTemp-minTemp)*d.temp2m) - ((this.state.height) * Math.abs(minTemp) / (maxTemp-minTemp)))*0.8+50 })
+                            //(this.state.height -(maxTemp-minTemp))-((this.state.height-(maxTemp-minTemp))/(maxTemp-minTemp)*this.props.cityOverview.weatherDetails.dataseries[index].temp2m) - (this.state.height * Math.abs(minTemp) / (maxTemp-minTemp)) )+"px"
+                            //(this.state.height -(maxTemp-minTemp))-((this.state.height-(maxTemp-minTemp))/(maxTemp-minTemp)*d.temp2m) - (this.state.height * Math.abs(minTemp) / (maxTemp-minTemp)) )+"px"
             
             svg.select('#tempLine')
-            .attr('d',lineFunction(this.state.cityDetails.weatherDetails.dataseries.map((d)=>{return d})))
+            .attr('d',lineFunction(this.props.cityOverview.weatherDetails.dataseries.map((d)=>{return d})))
             .attr('stroke-width',3)
             .attr('stroke','url(#tempGradient)')
             .attr('fill','none')
@@ -150,18 +148,18 @@ class DetailedWeather extends Component {
             .style("transition",".2s ease all");
             
             svg.on("mousemove",(_d,i)=>{
-                let unitValue = (this.state.width)/(this.state.cityDetails.weatherDetails.dataseries.length);
+                let unitValue = (this.state.width)/(this.props.cityOverview.weatherDetails.dataseries.length);
                 let index = Math.trunc((_d.clientX-svgLeft-40)/unitValue);
-                if (index >= 0 && index < this.state.cityDetails.weatherDetails.dataseries.length){
+                if (index >= 0 && index < this.props.cityOverview.weatherDetails.dataseries.length){
                     let currentDate = new Date();
-                    const timepointToMillis =  this.state.cityDetails.weatherDetails.dataseries[index].timepoint*3600*1000 - 3*1000*3600;
-                    console.log(this.state.cityDetails.weatherDetails.dataseries[index].timepoint);
+                    const timepointToMillis =  this.props.cityOverview.weatherDetails.dataseries[index].timepoint*3600*1000 - 3*1000*3600;
+                    console.log(this.props.cityOverview.weatherDetails.dataseries[index].timepoint);
                     let unixSelectedDate = currentDate.getTime() + timepointToMillis;
                     circle.attr("cx",( unitValue*index+20 )+"px");
-                    circle.attr('cy',( (this.state.height -(maxTemp-minTemp))-((this.state.height-(maxTemp-minTemp))/(maxTemp-minTemp)*this.state.cityDetails.weatherDetails.dataseries[index].temp2m) - (this.state.height * Math.abs(minTemp) / (maxTemp-minTemp)) )+"px");
-                    content.temperature.text(this.state.cityDetails.weatherDetails.dataseries[index].temp2m+"°C");
-                    content.precType.text(this.state.cityDetails.weatherDetails.dataseries[index].prec_type);
-                    content.weather.attr("src",this.state.cityDetails.weatherDetails.dataseries[index].weather+'.svg');
+                    circle.attr('cy',(  ((this.state.height -(maxTemp-minTemp))-((this.state.height-(maxTemp-minTemp))/(maxTemp-minTemp)*this.props.cityOverview.weatherDetails.dataseries[index].temp2m) - (this.state.height * Math.abs(minTemp) / (maxTemp-minTemp)))*0.8 + 50 ));
+                    content.temperature.text(this.props.cityOverview.weatherDetails.dataseries[index].temp2m+"°C");
+                    content.precType.text(this.props.cityOverview.weatherDetails.dataseries[index].prec_type);
+                    content.weather.attr("src",this.props.cityOverview.weatherDetails.dataseries[index].weather+'.svg');
                     content.date.text(new Date(unixSelectedDate).toLocaleString());
                     
                 }            
