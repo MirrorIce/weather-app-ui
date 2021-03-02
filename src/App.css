@@ -34,8 +34,9 @@ html{
 
 .detailedWeatherView{
   position:relative;
-  width:fit-content;
+  width:80vw;
   margin:0 auto;
+  bottom:0px;
 }
 
 .detailedWeatherView h2:nth-child(2){
@@ -164,8 +165,7 @@ html{
 svg{
   position:absolute;
   left:10%;
-  top:35%;
-  margin:auto;
+  top:40%;
   padding:50px;
 }
 
